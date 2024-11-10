@@ -23,13 +23,22 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	d := make([]int, 100)
+	d := make([][100]int, 100)
+	last := 0
 	for _, record := range records[1:] {
 		fmt.Println(record[0], record[1])
 		price := []rune(strings.Trim(record[1], ","))
-		context := (price[0] - '0') * 10
-		context += price[1] - '0'
-		d[context]++
+		context := int((price[0] - '0') * 10)
+		context += int(price[1] - '0')
+		d[last][context]++
+		last = context
 	}
-	fmt.Println(d)
+	fmt.Println(d[last])
+	max, index := 0, 0
+	for i, v := range d[last] {
+		if v >= max {
+			max, index = v, i
+		}
+	}
+	fmt.Println(max, index)
 }
